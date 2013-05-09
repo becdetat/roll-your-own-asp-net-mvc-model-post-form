@@ -1,0 +1,56 @@
+﻿@using RyoAspNetMvcModelPost.Models
+@model RyoAspNetMvcModelPost.Models.ParentViewModel
+
+@{
+    ViewBag.Title = "Editing some boring view model";
+    //Layout = "_Layout";
+}
+
+<p>Note that the view model (<em>and children</em>) need a public,
+    parameterless constructor, and all fields/properties that need
+    to automagically be set need to have a public <code>set</code> method.</p>
+
+<h2>Editing view model: @Model.Title</h2>
+
+<form method="POST" action="/Some/IndexSubmit">
+    <table>
+        <thead>
+            <tr>
+                <th>Some identifier</th>
+                <th>Title</th>
+                <th>New state</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            <!-- Everything is very boring except for this: -->
+            @foreach (var child in Model.Children)
+            {
+                <input type="hidden" name="Children.Index" value="@child.SomeIdentifier"/>
+                <input type="hidden" name="Children[@child.SomeIdentifier].SomeIdentifier" value="@child.SomeIdentifier"/>
+                <tr>
+                    <td>@child.SomeIdentifier</td>
+                    <td>@child.Title</td>
+                    <td>
+                        <label>
+                            <input type="radio" name="Children[@child.SomeIdentifier].State" value="@ChildState.StateIsFalse"/>
+                            False
+                        </label>
+                        <label>
+                            <input type="radio" name="Children[@child.SomeIdentifier].State" value="@ChildState.StateIsTrue"/>
+                            True
+                        </label>
+                        <label>
+                            <input type="radio" name="Children[@child.SomeIdentifier].State" value="@ChildState.StateIsFileNotFound"/>
+                            FILENOTFOUND
+                        </label>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+   <button type="submit">Update children</button>
+</form>
+
+
